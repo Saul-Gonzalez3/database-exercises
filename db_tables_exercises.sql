@@ -27,8 +27,9 @@ DESCRIBE SOURCE employees;
 -- What is the relationship between the employees and the departments tables? (Write this question and your answer in a comment)
 SHOW CREATE TABLE employees;
 SHOW CREATE TABLE departments;
--- I could not find a relationship between the two tables.
+-- I could not find a relationship between the two different tables.
 -- Show the SQL code that created the dept_manager table. Write the SQL it takes to show this as your exercise solution.
 SHOW CREATE TABLE dept_manager;
+
 
 
