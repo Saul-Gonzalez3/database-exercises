@@ -1,7 +1,7 @@
 -- Write a query to find all employees whose last name starts and ends with 'E'. Use concat() to combine their first and last name together as a single column named full_name.
 USE employees;
 SELECT * FROM employees;
-SELECT CONCAT(first_name, " ", last_name) AS full_name FROM employees WHERE (last_name LIKE 'E%' AND last_name LIKE '%e');
+SELECT CONCAT(first_name, " ", last_name) AS full_name FROM employees WHERE (last_name LIKE 'E%' AND last_name LIKE '%e'); -- 'e%e'
 
 
 -- Convert the names produced in your last query to all uppercase.
@@ -35,7 +35,7 @@ SELECT MIN(salary) FROM salaries; -- A) 38623
 -- the last two digits of the year that they were born
 
 SELECT * FROM employees;
-SELECT CONCAT(SUBSTR(LOWER(first_name), 1, 1), SUBSTR(LOWER(last_name), 1, 4), '_', SUBSTR(birth_date, 6, 2), SUBSTR(birth_date, 3, 2)) AS username FROM employees LIMIT 10;
+SELECT CONCAT(SUBSTR(LOWER(first_name), 1, 1), SUBSTR(LOWER(last_name), 1, 4), '_', SUBSTR(birth_date, 6, 2), SUBSTR(birth_date, 3, 2)) AS username FROM employees;
 
 
 
