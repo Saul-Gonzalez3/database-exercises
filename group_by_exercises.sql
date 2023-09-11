@@ -36,3 +36,47 @@ SELECT last_name, COUNT(last_name), CONCAT(SUBSTR(LOWER(first_name), 1, 1), SUBS
 -- From your previous query, are there any duplicate usernames? What is the highest number of times a username shows up? Bonus: How many duplicate usernames are there?
 
 -- A) Yes there are duplicate usernames, as the count show numerous usernames where there are 2's and even a 3 count (the highest number) appearing in the results. There were 63 duplicate usernames.
+
+-- Determine the historic average salary for each employee. When you hear, read, or think "for each" with regard to SQL, you'll probably be grouping by that exact column.
+SHOW DATABASES;
+USE employees;
+SHOW tables;
+SELECT * FROM salaries;
+SELECT AVG(salary) AS average_salary, emp_no FROM salaries GROUP BY emp_no;
+
+
+-- Using the dept_emp table, count how many current employees work in each department. The query result should show 9 rows, one for each department and the employee count.
+SHOW tables;
+SELECT * FROM dept_emp;
+SELECT COUNT(emp_no) AS number_of_employees, dept_no FROM dept_emp GROUP BY dept_no;
+
+
+-- Determine how many different salaries each employee has had. This includes both historic and current.
+SELECT * FROM salaries;
+SELECT emp_no, COUNT(emp_no) AS different_salaries FROM salaries GROUP BY emp_no; 
+
+
+-- Find the maximum salary for each employee.
+
+SELECT * FROM salaries;
+SELECT emp_no, max(salary) AS max_salary FROM salaries GROUP BY emp_no;
+
+-- Find the minimum salary for each employee.
+SELECT * FROM salaries;
+SELECT emp_no, min(salary) AS min_salary FROM salaries GROUP BY emp_no;
+
+
+-- Find the standard deviation of salaries for each employee.
+
+SELECT * FROM salaries;
+SELECT emp_no, stddev(salary) AS stddev_salary FROM salaries GROUP BY emp_no;
+
+
+-- Find the max salary for each employee where that max salary is greater than $150,000.
+SELECT * FROM salaries;
+SELECT emp_no, max(salary) AS max_salary FROM salaries WHERE salary > 150000 GROUP BY emp_no;
+
+-- Find the average salary for each employee where that average salary is between $80k and $90k.
+
+SELECT * FROM salaries;
+SELECT emp_no, avg(salary) AS average_salary FROM salaries WHERE salary BETWEEN  80000 AND 90000 GROUP BY emp_no;
