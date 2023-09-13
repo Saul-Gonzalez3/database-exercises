@@ -30,8 +30,13 @@ RIGHT JOIN roles
 -- Hint: You will also need to use group by in the query.
 SELECT * FROM users;
 SELECT * FROM roles;
-SELECT COUNT(*) AS number_of_users, roles.name AS roles FROM users JOIN roles ON users.id = roles.id GROUP BY roles.name;
-
+-- SELECT COUNT(*) AS number_of_users, roles.name AS roles FROM users JOIN roles ON users.id = roles.id GROUP BY roles.name;
+SELECT r.`name` as role_name
+	, COUNT(u.name) as role_count
+FROM users as u
+RIGHT JOIN roles as r
+	ON r.id = u.role_id
+GROUP BY r.`name`;
 
 
 
@@ -121,7 +126,7 @@ JOIN dept_emp
   ON employees.emp_no = dept_emp.emp_no
 JOIN departments
  ON departments.dept_no = dept_emp.dept_no
-WHERE titles.to_date >= NOW() AND dept_name = "Customer Service" GROUP BY title;
+WHERE titles.to_date >= NOW() AND dept_emp.to_date >= NOW() AND dept_name = "Customer Service" GROUP BY title;
   
 -- Title              | Count
 -- -------------------+------
@@ -151,7 +156,7 @@ JOIN titles
 	ON employees.emp_no = employees.emp_no
 JOIN departments
 	ON dept_emp.dept_no = departments.dept_no
-WHERE dept_manager.to_date >= NOW() AND title = "Manager" GROUP BY  last_name, dept_name, title ;
+WHERE dept_manager.to_date >= NOW() AND salaries.to_date > CURDATE() AND title = "Manager" GROUP BY  last_name, dept_name, title ;
 -- Department Name    | Name              | Salary
 -- -------------------+-------------------+-------
 -- Customer Service   | Yuchang Weedman   |  58745
@@ -208,7 +213,7 @@ JOIN departments
 	ON dept_emp.dept_no = departments.dept_no
 JOIN salaries
 	ON dept_emp.emp_no = salaries.emp_no
-WHERE salaries.to_date >= NOW() GROUP BY dept_name;
+WHERE (dept_emp.to_date >= NOW()) AND (salaries.to_date > NOW()) GROUP BY dept_name ORDER BY AVG(salary) DESC LIMIT 1;
 
 -- +-----------+----------------+
 -- | dept_name | average_salary |
@@ -234,22 +239,7 @@ JOIN departments
 	ON dept_emp.dept_no = departments.dept_no
 JOIN titles
 	ON employees.emp_no = titles.emp_no
-WHERE dept_emp.to_date >= NOW() AND dept_emp.to_date >= NOW() AND dept_name = "Marketing" AND (title != "Manager") GROUP BY first_name, last_name, dept_name;
-
-
-
-
-
-
--- SELECT first_name, last_name, max(salary), dept_name
--- FROM employees
--- JOIN dept_emp
--- 	ON dept_emp.emp_no = employees.emp_no
--- JOIN departments
--- 	ON dept_emp.dept_no = departments.dept_no
--- JOIN salaries
--- 	ON dept_emp.emp_no = salaries.emp_no
--- WHERE dept_emp.to_date >= NOW() AND dept_name = "Marketing" GROUP BY first_name, last_name, dept_name;
+WHERE dept_emp.to_date >= NOW() AND dept_emp.to_date >= NOW() AND dept_name = "Marketing" AND (title != "Manager") GROUP BY first_name, last_name, dept_name ORDER BY MAX(salary) DESC LIMIT 1;
 
 -- +------------+-----------+
 -- | first_name | last_name |
@@ -266,9 +256,7 @@ WHERE dept_emp.to_date >= NOW() AND dept_emp.to_date >= NOW() AND dept_name = "M
 
 
 -- Which current department manager has the highest salary?
-
-
-SELECT first_name, last_name, max(salary), dept_name
+SELECT first_name, last_name, salary, dept_name
 FROM employees
 JOIN dept_emp
 	ON dept_emp.emp_no = employees.emp_no
@@ -278,7 +266,7 @@ JOIN salaries
 	ON dept_emp.emp_no = salaries.emp_no
 JOIN dept_manager
 	ON dept_emp.emp_no = dept_manager.emp_no
-WHERE dept_manager.to_date >= NOW() GROUP BY first_name, last_name, dept_name;
+WHERE dept_manager.to_date >= NOW() AND dept_emp.to_date >= NOW() GROUP BY first_name, last_name, dept_name, salary ORDER BY salary DESC LIMIT 1;
 
 -- +------------+-----------+--------+-----------+
 -- | first_name | last_name | salary | dept_name |
@@ -304,7 +292,7 @@ JOIN salaries
 	ON dept_emp.emp_no = salaries.emp_no
 JOIN dept_manager
 	ON dept_emp.emp_no = dept_manager.emp_no
-GROUP BY dept_name;
+GROUP BY dept_name ORDER BY average_salary DESC;
 
 
 -- +--------------------+----------------+
